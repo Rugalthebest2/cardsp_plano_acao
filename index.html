@@ -117,6 +117,15 @@ select:focus{border-color:var(--cy);box-shadow:var(--gc)}
 .gal img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
 .gal button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;border:1px solid #ff6b7e;background:rgba(4,7,11,.85);color:#ff6b7e;cursor:pointer}
 #lbi{max-width:100%;max-height:88vh;margin:auto;border-radius:10px;box-shadow:var(--gc)}
+.lb{display:flex;justify-content:space-between;align-items:center;font:11.5px ui-monospace,monospace;color:var(--dim);margin:12px 0 6px}
+.mic{font:700 11.5px ui-monospace,monospace;padding:5px 12px;border-radius:14px;border:1px solid var(--ln);background:transparent;color:var(--cy);cursor:pointer}
+.mic.on,.vz.on{border-color:#ff2e4d;color:#ff4d68;background:rgba(255,46,77,.12);animation:rp 1.1s ease-in-out infinite}
+@keyframes rp{50%{box-shadow:0 0 0 8px rgba(255,46,77,0),0 0 22px rgba(255,46,77,.7)}0%,100%{box-shadow:0 0 0 0 rgba(255,46,77,.5),0 0 8px rgba(255,46,77,.4)}}
+.vz{display:block;margin:6px auto 8px;width:96px;height:96px;border-radius:50%;font-size:40px;border:2px solid var(--cy);background:#060d12;color:var(--cy);cursor:pointer;box-shadow:var(--gc)}
+#vS{text-align:center;font:12px ui-monospace,monospace;color:var(--dim);margin-bottom:12px;min-height:16px}
+#vI{color:#7b9ca6;font-style:italic;font-size:13px;min-height:18px;margin:6px 2px 0}
+.vp{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;font:11.5px ui-monospace,monospace}.vp:empty{display:none}
+.vp span{padding:3px 10px;border-radius:12px;border:1px solid var(--ln);color:var(--dim)}
 .det{white-space:pre-wrap;color:var(--dim);font-size:14px;line-height:1.5;background:#060d12;border:1px solid var(--ln);border-radius:8px;padding:12px}
 </style>
 </head>
@@ -145,7 +154,8 @@ select:focus{border-color:var(--cy);box-shadow:var(--gc)}
   </div>
 
   <div class="bar">
-    <button class="btn pri" id="novo">+ Nova ação</button>
+    <button class="btn pri" id="novo" style="margin-right:0">+ Nova ação</button>
+    <button class="btn" id="voz" style="margin-right:auto" title="Criar ação falando">🎙 Por voz</button>
     <button class="btn on" data-f="todos">Todas <span id="c-todos">0</span></button>
     <button class="btn" data-f="pendente">Pendente <span id="c-pendente">0</span></button>
     <button class="btn" data-f="andamento">Em andamento <span id="c-andamento">0</span></button>
@@ -166,7 +176,7 @@ select:focus{border-color:var(--cy);box-shadow:var(--gc)}
 <div class="mo" id="mNovo" hidden><div class="md">
   <h2 id="mh">Nova ação</h2>
   <label>Título *</label><input id="t" placeholder="Ex.: Enviar proposta ao cliente">
-  <label>Descrição</label><textarea id="d" placeholder="Detalhes da ação..."></textarea>
+  <div class="lb">Descrição <button type="button" class="mic" id="micD">🎙 Ditar</button></div><textarea id="d" placeholder="Detalhes da ação..."></textarea>
   <label>Prazo</label><input type="date" id="p">
   <label style="display:flex;gap:8px;align-items:center;cursor:pointer;color:#ff6b7e;font-size:13px"><input type="checkbox" id="u" style="width:20px;height:20px;accent-color:#ff2e4d">⚠ Marcar como URGENTE</label>
   <label>Etiquetas</label><div class="chips" id="fTags"></div>
@@ -187,7 +197,7 @@ select:focus{border-color:var(--cy);box-shadow:var(--gc)}
     <button class="btn" data-s="concluido">Concluído</button>
   </div>
   <input type="file" id="fi2" accept="image/*" multiple hidden>
-  <div class="row"><button class="btn" id="fo">Foco</button><button class="btn" id="ed">✎ Editar</button><button class="btn" id="anx2">📎 Anexar</button><button class="btn" id="arq">Arquivar</button><button class="btn dan" id="del">Excluir</button><button class="btn" data-x>Fechar</button></div>
+  <div class="row"><button class="btn" id="fo">Foco</button><button class="btn" id="ed">✎ Editar</button><button class="btn" id="vn">🎙 Nota de voz</button><button class="btn" id="anx2">📎 Anexar</button><button class="btn" id="arq">Arquivar</button><button class="btn dan" id="del">Excluir</button><button class="btn" data-x>Fechar</button></div>
 </div></div>
 
 <div class="mo" id="lb" hidden><img id="lbi" alt=""></div>
@@ -220,6 +230,17 @@ select:focus{border-color:var(--cy);box-shadow:var(--gc)}
     <button id="cX" title="Sair do foco">✕</button>
   </div>
 </div>
+
+<!-- Modal: voz -->
+<div class="mo" id="mVoz" hidden><div class="md">
+  <h2 id="vh">🎙 Nova ação por voz</h2>
+  <button class="vz" id="vB" type="button">🎙</button>
+  <div id="vS">Toque no microfone e fale</div>
+  <textarea id="vT" placeholder="O que você falar aparece aqui. Dá para corrigir digitando."></textarea>
+  <div id="vI"></div>
+  <div class="vp" id="vP"></div>
+  <div class="row"><button class="btn" data-x>Cancelar</button><button class="btn pri" id="vOk" style="margin:0">Criar ação</button></div>
+</div></div>
 
 <!-- Modal: resumo do dia -->
 <div class="mo" id="mRes" hidden><div class="md" style="max-width:600px">
@@ -399,8 +420,65 @@ document.querySelectorAll("#mDet .st .btn").forEach(function(b){b.onclick=functi
   cache();render();marca();dbSave(atual);
 }});
 $("del").onclick=function(){if(confirm('Excluir "'+atual.titulo+'"?'+(atual.pago?" Você perderá as "+atual.pago+" moeda(s) dela. Para guardar as moedas, use Arquivar.":""))){A=A.filter(function(a){return a!==atual});cache();render();dbDel(atual.id);$("mDet").hidden=true}};
-document.querySelectorAll("[data-x]").forEach(function(b){b.onclick=function(){b.closest(".mo").hidden=true}});
-document.querySelectorAll(".mo").forEach(function(m){m.onclick=function(e){if(e.target===m)m.hidden=true}});
+document.querySelectorAll("[data-x]").forEach(function(b){b.onclick=function(){parar();b.closest(".mo").hidden=true}});
+document.querySelectorAll(".mo").forEach(function(m){m.onclick=function(e){if(e.target===m){parar();m.hidden=true}}});
+
+/* ---- voz: ditado pelo navegador (pt-BR), sem servidor ---- */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,grav=false,vBase="",vSess="",vBtn=null,vMode="nova";
+function junta(a,b){var s=((a||"").trim()+" "+(b||"").trim()).trim();return s.charAt(0).toUpperCase()+s.slice(1)}
+function vUI(){document.querySelectorAll(".mic,.vz").forEach(function(b){b.classList.toggle("on",grav&&b===vBtn)});
+  $("micD").textContent=grav&&vBtn===$("micD")?"⏹ Parar":"🎙 Ditar";
+  $("vS").textContent=!SR?"Ditado não suportado neste navegador — use Chrome, Edge ou Safari (ou o 🎤 do teclado)":grav&&vBtn===$("vB")?"Ouvindo... toque de novo para parar":"Toque no microfone e fale"}
+function parar(){grav=false;try{rec&&rec.stop()}catch(e){}rec=null;$("vI").textContent="";vUI()}
+function ouvir(btn,inicial,onTxt){
+  if(!SR){alert("Seu navegador não suporta ditado. Use Chrome, Edge ou Safari — ou o microfone 🎤 do teclado do celular.");return}
+  if(grav&&vBtn===btn){parar();return}
+  parar();vBtn=btn;vBase=inicial||"";vSess="";grav=true;vUI();
+  function novo(){rec=new SR();rec.lang="pt-BR";rec.continuous=true;rec.interimResults=true;
+    rec.onresult=function(e){var p=[],tmp="";
+      for(var i=0;i<e.results.length;i++){var t=e.results[i][0].transcript.trim();
+        if(!e.results[i].isFinal){tmp+=" "+t;continue}
+        if(p.length&&t.toLowerCase().indexOf(p[p.length-1].toLowerCase())===0)p[p.length-1]=t;else p.push(t)} /* evita repetição no Android */
+      vSess=p.join(" ");onTxt(junta(vBase,vSess),tmp.trim())};
+    rec.onerror=function(e){if(e.error==="not-allowed"||e.error==="service-not-allowed"){parar();alert("Permita o uso do microfone para este site (ícone de cadeado na barra de endereço).")}};
+    rec.onend=function(){if(grav){vBase=junta(vBase,vSess);vSess="";try{novo()}catch(x){parar()}}};
+    rec.start()}
+  try{novo()}catch(e){parar()}
+}
+/* entende o que foi falado: título, urgente, prazo e etiquetas */
+var DIAS={domingo:0,segunda:1,"terça":2,terca:2,quarta:3,quinta:4,sexta:5,"sábado":6,sabado:6};
+function interp(s){s=(s||"").trim();var r={urg:/(^|[^a-zà-ú])urgente/i.test(s),prazo:"",etqs:[]},d=new Date(),m;
+  if(/depois de amanh[ãa]/i.test(s)){d.setDate(d.getDate()+2);r.prazo=ymd(d)}
+  else if(/(^|[^a-zà-ú])amanh[ãa]([^a-zà-ú]|$)/i.test(s)){d.setDate(d.getDate()+1);r.prazo=ymd(d)}
+  else if(/(^|[^a-zà-ú])hoje([^a-zà-ú]|$)/i.test(s))r.prazo=ymd(d);
+  else if(m=s.match(/(?:at[ée]|na|pra|para|nesta|nessa|essa|esta|pr[óo]xima)\s+(segunda|ter[çc]a|quarta|quinta|sexta|s[áa]bado|domingo)/i)){var w=DIAS[m[1].toLowerCase()],k=(w-d.getDay()+7)%7||7;d.setDate(d.getDate()+k);r.prazo=ymd(d)}
+  else if(m=s.match(/dia\s+(\d{1,2})(?!\d)/i)){var n=+m[1];if(n>=1&&n<=31){if(n<d.getDate())d.setMonth(d.getMonth()+1);d.setDate(n);r.prazo=ymd(d)}}
+  CFG.tags.forEach(function(t){if(new RegExp("(^|[^a-zà-ú])"+t.nome.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^a-zà-ú]|$)","i").test(s))r.etqs.push(t.id)});
+  var f=(s.match(/^[^.!?\n]+/)||[s])[0].trim(),resto=s.slice(f.length).replace(/^[.!?\s]+/,"").trim();
+  if(f.length>70){var c=f.slice(0,70);c=c.slice(0,c.lastIndexOf(" ")>30?c.lastIndexOf(" "):70);r.titulo=c+"…";r.desc=s}
+  else{r.titulo=f;r.desc=resto}
+  return r}
+function vPrev(){if(vMode!=="nova"){$("vP").innerHTML="";return}var s=$("vT").value.trim();if(!s){$("vP").innerHTML="";return}var r=interp(s);
+  $("vP").innerHTML='<span style="color:var(--ink)">📝 '+esc(r.titulo)+'</span>'+(r.urg?'<span style="color:#ff6b7e;border-color:#ff2e4d">🔥 Urgente</span>':'')+(r.prazo?'<span style="color:var(--cy);border-color:var(--cy)">📅 '+r.prazo.split("-").reverse().join("/")+'</span>':'')+tg({etqs:r.etqs})}
+function abrirVoz(modo){vMode=modo;$("vT").value="";$("vI").textContent="";
+  $("vh").textContent=modo==="nova"?"🎙 Nova ação por voz":"🎙 Nota de voz · "+atual.titulo;
+  $("vOk").textContent=modo==="nova"?"Criar ação":"Salvar na ação";
+  $("vT").placeholder=modo==="nova"?"Ex.: Ligar pro cliente sobre o orçamento. Urgente, até sexta.":"O que você falar será adicionado à descrição desta ação.";
+  vPrev();vUI();$("mVoz").hidden=false;if(SR)ouvir($("vB"),"",vTxt)}
+function vTxt(t,tmp){$("vT").value=t;$("vI").textContent=tmp;vPrev()}
+$("vB").onclick=function(){ouvir(this,$("vT").value,vTxt)};
+$("vT").oninput=function(){if(grav)parar();vPrev()};
+$("voz").onclick=function(){abrirVoz("nova")};
+$("vn").onclick=function(){$("mDet").hidden=true;abrirVoz("nota")};
+$("vOk").onclick=function(){var s=$("vT").value.trim();if(!s){$("vT").focus();return}parar();
+  if(vMode==="nova"){var r=interp(s),a={id:"a"+Date.now().toString(36),titulo:r.titulo,desc:r.desc,prazo:r.prazo,fotos:[],status:"pendente",urgente:r.urg,etqs:r.etqs,criado:new Date().toISOString(),voz:true};
+    A.push(a);cache();render();dbSave(a);$("mVoz").hidden=true}
+  else{var h=new Date(),st=("0"+h.getDate()).slice(-2)+"/"+("0"+(h.getMonth()+1)).slice(-2)+" "+("0"+h.getHours()).slice(-2)+":"+("0"+h.getMinutes()).slice(-2);
+    atual.desc=(atual.desc?atual.desc+"\n\n":"")+"🎙 "+st+" — "+s;cache();render();dbSave(atual);$("mVoz").hidden=true;abrirDet(atual.id)}};
+$("micD").onclick=function(){ouvir(this,$("d").value,function(t){$("d").value=t})};
+$("d").addEventListener("input",function(){if(grav&&vBtn===$("micD"))parar()});
+$("salvar").addEventListener("click",parar,true);
+vUI();
 document.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){
   filtro=b.dataset.f;document.querySelectorAll("[data-f]").forEach(function(x){x.classList.toggle("on",x===b)});render();
 }});
